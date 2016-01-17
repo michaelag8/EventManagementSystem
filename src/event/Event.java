@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -34,6 +35,7 @@ public class Event implements Serializable  {
 	
 	private Connection connection = null;
     private Statement statement = null;
+    private PreparedStatement pstatement = null;
     private ResultSet rs = null;
     private String query = "";
 	
@@ -185,8 +187,28 @@ public class Event implements Serializable  {
 	 * @param event bean to add event data to database
 	 * @return boolean to check if insert is successful
 	 */
-	public boolean addEvent(Event event) {
-		return true;
+	public void addEvent(Event event) throws SQLException {
+		
+		query = "INSERT INTO presetevent (eventname, category, location, estimateguests, "
+				+ "cost, description) VALUES (?, ?, ?, ?, ?, ?)";
+		
+		try {
+    		connection = DBConnect.getConnection();
+    		pstatement = connection.prepareStatement(query);
+    		pstatement.setString(1 , event.getEventName());
+    		pstatement.setString(2 , event.getCategory());
+    		pstatement.setString(3 , event.getLocation());
+    		pstatement.setInt(4 , event.getEstGuestNumber());
+    		pstatement.setBigDecimal(5 , event.getEventCost());
+    		pstatement.setString(6 , event.getDescription());
+    		pstatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+        	pstatement.close();
+            connection.close();
+        }
 	}
 	/**
 	 * @return event bean to view current pre-set event
@@ -216,6 +238,7 @@ public class Event implements Serializable  {
             statement.close();
             connection.close();
         }
+		
 		return event;
 	}
 	/**

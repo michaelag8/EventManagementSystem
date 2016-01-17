@@ -32,18 +32,18 @@ License: Creative Commons Attribution
 
                 <div id="main-content" >
                   <fieldset>
-                    <form action="#" method="post">
+                    <form action="${pageContext.request.contextPath}/AddPreset" method="post">
                       <table width="200" border="0">
                         <tr>
-                          <td width="32%"><label>Name</label>&nbsp;</td>
-                          <td width="68%"><input name="eventname" type="text" id="1" maxlength="80"></td>
+                          <td width="32%"><label>Name*</label>&nbsp;</td>
+                          <td width="68%"><input name="eventname" type="text" id="eventname" maxlength="80" required autofocus></td>
                         </tr>
                         
                         <tr>
-                          <td><label>Category</label>&nbsp;</td>
+                          <td><label>Category*</label>&nbsp;</td>
                           <td>
                             <p>
-                              <label><input type="radio" name="category" value="Corporate" id="category_0"> Corporate</label>
+                              <label><input type="radio" name="category" value="Corporate" id="category_0" checked = "checked"> Corporate</label>
                               <label><input type="radio" name="category" value="Social" id="category_1"> Social</label>
                               <label><input type="radio" name="category" value="Private" id="category_2"> Private</label>
                             </p>
@@ -51,23 +51,23 @@ License: Creative Commons Attribution
                         </tr>
                         
                         <tr>
-                          <td><label>Location</label></td>
-                          <td><input name="location" type="text" id="location" maxlength="100"></td>
+                          <td><label>Location*</label></td>
+                          <td><input name="location" type="text" id="location" maxlength="100" required></td>
                         </tr>
                         
                         <tr>
-                          <td><label>Estimate Number Of Guests</label></td>
-                          <td><input type="number" name="estnumguests" id="estnumguests"></td>
+                          <td><label>Estimate Number Of Guests*</label></td>
+                          <td><input type="number" name="estnumguests" id="estnumguests" required min="1"></td>
                         </tr>
                             
                         <tr>
-                          <td><label>Cost</label></td>
-                          <td><input type="number" name="cost" id="cost"></td>
+                          <td><label>Cost*</label></td>
+                          <td><input type="number" name="cost" id="cost" required min="0.01" step="0.01"></td>
                         </tr>
                         
                         <tr>
-                          <td><label>Description</label></td>
-                          <td><textarea name="description" id="description" maxlength="200" ></textarea></td>
+                          <td><label>Description*</label></td>
+                          <td><textarea name="description" id="description" maxlength="200" required ></textarea></td>
                         </tr>
                         
                         <tr>

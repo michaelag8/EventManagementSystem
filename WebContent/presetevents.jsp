@@ -46,9 +46,10 @@
                                         int eventid = event.getEventid();
                                         String eventname = event.getEventName();
                                         String category = event.getCategory();
+                                        String url = "event.jsp?id=" + eventid + "&type=preset";
                             %>
                                     <tr> 
-                                      <td width="70%"><a href="event.jsp?id=<%=eventid%>&type=preset">
+                                      <td width="70%"><a href=<%=url%>>
                                       		<%=eventname%></a></td>
                                       <td width="30%"><%=category%></td>
                                     </tr>

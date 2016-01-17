@@ -24,7 +24,7 @@ License: Creative Commons Attribution
     <div id="body" class="width">
         <div id="main-content">
         	<h1>SORRY FOR THE INCONVIENCE </h1>
-        	<h2>Some thing went wrong. Please come back later.</h2>
+        	<h2>Something went wrong. Please come back later.</h2>
         </div>
 		
     	<div class="clear"></div>

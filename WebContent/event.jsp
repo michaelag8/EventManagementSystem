@@ -25,17 +25,20 @@
     	    <article>
         	  <% 
               String eventid = request.getParameter("id");
-              //String type = request.getParameter("type"); 
+              String type = request.getParameter("type"); 
               Event event = null;
 
-              /*if("preset" == type) {
+              if("preset".equals(type)) {
                 event = presetevents.viewEvent(Integer.parseInt(eventid));
-              } else if("custom" == type) {
-                //event = presetevents.viewEvent(Integer.parseInt(eventid));
+              } else if("custom".equals(type)) {
+                event = presetevents.viewEvent(Integer.parseInt(eventid)); 
               } else {
-                //error page here
-              } */
+                response.sendRedirect("error.jsp");
+              }
               
+              if(event == null) {
+                response.sendRedirect("error.jsp");
+              }
               String eventname = event.getEventName();
               String category = event.getCategory();
               String location = event.getLocation();
