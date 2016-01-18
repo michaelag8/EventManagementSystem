@@ -1,19 +1,12 @@
 <!doctype html>
 <html>
+<%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
+<jsp:useBean id="allusers" class="user.StaffUser" scope="request" />
+<%@ page import="user.StaffUser" %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Admin</title>
 <link rel="stylesheet" href="css/styles.css" type="text/css" />
-<!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-<!--
-monopoly, a free CSS web template by ZyPOP (zypopwebtemplates.com/)
-
-Download: http://zypopwebtemplates.com/
-
-License: Creative Commons Attribution
-//-->
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 <body>
@@ -30,7 +23,8 @@ License: Creative Commons Attribution
 
         <div id="main-content" >
           <div id="refinesearch">
-            <button type="button" style="margin-left: 2px;" class="formbutton" id="adduser">Add New User</button>
+            <button type="button" style="margin-left: 2px;" class="formbutton" id="adduser"
+                  onclick="document.location.href='adduser.jsp';">Add New User</button>
           </div>
 
           <fieldset>
@@ -46,11 +40,31 @@ License: Creative Commons Attribution
             </thead>
 
             <tbody>
-              <tr>
-                <td width="30%"><a href="user.jsp">Username</a></td>
-                <td width="50%">First Last Name</td>
-                <td width="20%">Employee</td>
-              </tr>
+              <% 
+                ArrayList<StaffUser> users = allusers.viewUsers();
+                if(!users.isEmpty()) {
+                  for (StaffUser user : users) {
+                    int userid = user.getUserid();
+                    String username = user.getUserName();
+                    String completename = user.getFirstName() + " " + user.getLastName();
+                    String role = user.getUserRole();
+                    String url = "user.jsp?id=" + userid;
+              %>
+                    <tr>
+                      <td width="30%"><a href=<%=url%>> <%=username%> </a></td>
+                      <td width="50%"><%=completename%></td>
+                      <td width="20%"><%=role%></td>
+                    </tr>
+              <%
+                  } 
+                } else {
+              %>
+                    <tr> 
+                      <td colspan="3">No Users to Display</td>
+                    </tr>
+              <%
+                  }
+              %>
             </tbody>    
           </table> <!--end of table-->
         </div>

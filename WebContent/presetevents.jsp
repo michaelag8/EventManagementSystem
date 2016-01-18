@@ -41,7 +41,7 @@
                         <tbody>
                             <% 
                                 ArrayList<Event> events = presetevents.viewAllEvents();
-                                if(events != null) {
+                                if(!events.isEmpty()) {
                                 	for (Event event : events) {
                                         int eventid = event.getEventid();
                                         String eventname = event.getEventName();
@@ -49,8 +49,7 @@
                                         String url = "event.jsp?id=" + eventid + "&type=preset";
                             %>
                                     <tr> 
-                                      <td width="70%"><a href=<%=url%>>
-                                      		<%=eventname%></a></td>
+                                      <td width="70%"><a href=<%=url%>> <%=eventname%> </a></td>
                                       <td width="30%"><%=category%></td>
                                     </tr>
                             <%
@@ -58,7 +57,7 @@
                                 } else {
                             %>
                                     <tr> 
-                                      <td width="100%">No Events to Display</td>
+                                      <td colspan="3">No Events to Display</td>
                                     </tr>
                             <%
                                 }

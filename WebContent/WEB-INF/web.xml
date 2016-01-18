@@ -6,11 +6,19 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
   <servlet>
-  	<servlet-name>PresetController</servlet-name>
-  	<servlet-class>servlet.PresetController</servlet-class>
+    <servlet-name>PresetController</servlet-name>
+    <servlet-class>servlet.PresetController</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>PresetController</servlet-name>
-  	<url-pattern>/PresetController</url-pattern>
+    <servlet-name>PresetController</servlet-name>
+    <url-pattern>/PresetController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>servlet.UserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserController</servlet-name>
+    <url-pattern>/UserController</url-pattern>
   </servlet-mapping>
 </web-app>

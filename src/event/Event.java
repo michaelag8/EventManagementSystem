@@ -185,7 +185,6 @@ public class Event implements Serializable  {
 	}
 	/**
 	 * @param event bean to add event data to database
-	 * @return boolean to check if insert is successful
 	 */
 	public void addEvent(Event event) throws SQLException {
 		
@@ -211,6 +210,7 @@ public class Event implements Serializable  {
         }
 	}
 	/**
+	 * @param eventid to select event in database
 	 * @return event bean to view current pre-set event
 	 */
 	public Event viewEvent(int eventid) throws SQLException {
@@ -274,7 +274,6 @@ public class Event implements Serializable  {
 	}
 	/**
 	 * @param event bean to edit event data to database
-	 * @return boolean to check if edit is successful
 	 */
 	public void editEvent(Event event) throws SQLException {
 		
@@ -305,7 +304,7 @@ public class Event implements Serializable  {
 	 */
 	public void deleteEvent(int eventid) throws SQLException {
 		
-		query = "DELETE presetevent where presetid="+eventid;
+		query = "DELETE FROM presetevent where presetid="+eventid;
 		
 		try {
     		connection = DBConnect.getConnection();

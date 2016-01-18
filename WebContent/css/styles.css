@@ -66,6 +66,7 @@ a {
 	color: #111;
 	border-bottom: 1px solid #111;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 a:hover {
@@ -145,7 +146,14 @@ form input.formbutton, button {
 	letter-spacing: 1px;
 	width: auto;
 	overflow: visible;
+	cursor: pointer;
 }
+
+button:disabled, button[disabled=disabled], input[type=submit]:disabled, input[type=button]:disabled {
+	background-color: #939393;
+	cursor: default;
+}
+
 
 form.searchform input {
   font-size: 0.9em;
@@ -592,4 +600,19 @@ footer .footer-bottom p, footer .footer-bottom p a {
 .newclient {
 	display: none;
 	margin-top: 6px;
+}
+
+#validationrules {
+	color: red;
+	margin-left: 5px;
+	font-size: small;
+}
+
+p#pvalidationrule {
+	margin-bottom: 2px;
+	line-height: normal;
+}
+
+form td {
+	vertical-align: middle;
 }

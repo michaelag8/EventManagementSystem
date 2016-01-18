@@ -1,20 +1,13 @@
 <!doctype html>
 <html>
+<%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
+<jsp:useBean id="allclients" class="user.ClientUser" scope="request" />
+<%@ page import="user.StaffUser" %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Add Customised Event</title>
 <link rel="stylesheet" href="css/styles.css" type="text/css" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-<!--
-monopoly, a free CSS web template by ZyPOP (zypopwebtemplates.com/)
-
-Download: http://zypopwebtemplates.com/
-
-License: Creative Commons Attribution
-//-->
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 <body>
@@ -33,18 +26,18 @@ License: Creative Commons Attribution
 
         <div id="main-content" >
           <fieldset>
-            <form action="#" method="post">
+            <form action="#" method="post" id="addcustomisedevent">
               <table width="200" border="0">
                 <tr>
-                  <td width="32%"><label>Name</label>&nbsp;</td>
-                  <td width="68%"><input name="eventname" type="text" id="eventname" maxlength="80"></td>
+                  <td width="32%"><label>Name*</label>&nbsp;</td>
+                  <td width="68%"><input name="eventname" type="text" id="eventname" maxlength="80" required autofocus></td>
                 </tr>
                 
                 <tr>
-                  <td><label>Category</label>&nbsp;</td>
+                  <td><label>Category*</label>&nbsp;</td>
                   <td>
                     <p>
-                      <label><input type="radio" name="category" value="Corporate" id="category_0"> Corporate</label>
+                      <label><input type="radio" name="category" value="Corporate" id="category_0" checked = "checked"> Corporate</label>
                       <label><input type="radio" name="category" value="Social" id="category_1"> Social</label>
                       <label><input type="radio" name="category" value="Private" id="category_2"> Private</label>
                     </p>
@@ -52,40 +45,55 @@ License: Creative Commons Attribution
                 </tr>
                 
                 <tr>
-                  <td><label>Start Date and Time</label></td>
-                  <td><input type="datetime-local" id="date" name="startdatetime" value="2012-10-08" class="date" /></td>
+                  <td><label>Start Date and Time*</label></td>
+                  <td>
+                    <input type="datetime-local" id="date" name="startdatetime" class="date" required/>
+                    <span id="validationrules" class="startdateiscurrent" style="display:none">Event date cannot be current date.</span>
+                  </td>
                 </tr>
                 
                 <tr>
-                  <td><label>End Date and Time</label></td>
-                  <td><input type="datetime-local" id="date" name="enddatetime" value="2012-10-08" class="date" /></td>
+                  <td><label>End Date and Time*</label></td>
+                  <td><input type="datetime-local" id="date" name="enddatetime" class="date" required /></td>
                 </tr>
                 
                 <tr>
-                  <td><label>Location</label></td>
-                  <td><input name="location" type="text" id="location" maxlength="100"></td>
+                  <td><label>Location*</label></td>
+                  <td><input name="location" type="text" id="location" maxlength="100" required></td>
                 </tr>
                 
                 <tr>
-                  <td><label>Estimate Number Of Guests</label></td>
-                  <td><input type="number" name="estnumguests" id="estnumguests"></td>
+                  <td><label>Estimate Number Of Guests*</label></td>
+                  <td><input type="number" name="estnumguests" id="estnumguests" required min="1"></td>
                 </tr>
                     
                 <tr>
-                  <td><label>Cost</label></td>
-                  <td><input type="number" name="cost" id="cost"></td>
+                  <td><label>Cost*</label></td>
+                  <td><input type="number" name="cost" id="cost" required min="0.01" step="0.01"></td>
                 </tr>
                 
                 <tr>
-                  <td><label>Description</label></td>
-                  <td><textarea name="description" id="description" maxlength="200" ></textarea></td>
+                  <td><label>Description*</label></td>
+                  <td><textarea name="description" id="description" maxlength="200" required ></textarea></td>
                 </tr>
 
                 <tr>
                   <td><label>Client Name</label>&nbsp;</td>
                   <td>
-                    <select>
-                      <option value="item 1" >item1 </option>
+                    <select id="clientlist" name="clientid">
+                      <option value="" >---Select an option---</option>
+                      <% 
+                        ArrayList<StaffUser> clients = allclients.viewClients();
+                        if(!clients.isEmpty()) {
+                          for (StaffUser client : clients) {
+                            int userid = client.getUserid();
+                            String completename = client.getFirstName() + " " + client.getLastName();
+                      %>
+                            <option value="<%=userid%>"> <%=completename%> </option>  
+                      <% 
+                          }
+                        }
+                      %>
                     </select> <a id="addnewclient">New?</a>
                   </td>
                 </tr>
@@ -98,17 +106,17 @@ License: Creative Commons Attribution
 
                   <tr>
                     <td><label>Contact Number</label></td>
-                    <td><input type="text" name="contactnumber" id="contactnumber"></td>
+                    <td><input type="text" name="contactnumber" id="contactnumber" pattern="^\s*\(?(020[7,8]{1}\)?[ ]?[1-9]{1}[0-9{2}[ ]?[0-9]{4})|(0[1-8]{1}[0-9]{3}\)?[ ]?[1-9]{1}[0-9]{2}[ ]?[0-9]{3})\s*$"></td>
                   </tr>
 
                   <tr>
-                    <td><label>Email Adress</label>&nbsp;</td>
+                    <td><label>Email Address</label>&nbsp;</td>
                     <td><input name="emailaddress" type="email" id="emailaddress" maxlength="50"></td>
                   </tr>
                 </tbody>
 
                 <tr>
-                  <td><input type="submit" style="margin-left: 2px;" class="formbutton" id="login-button" value="Submit" />&nbsp;</td>
+                  <td><input type="submit" style="margin-left: 2px;" class="formbutton" id="login-button" value="Add" />&nbsp;</td>
                 </tr> 
           
               </table>
@@ -129,9 +137,34 @@ License: Creative Commons Attribution
 </html>
 
 <script language="javascript" type="text/javascript">
-  $(function () {
+  $(function () {    
         $("#addnewclient").click(function () {
             $(".newclient").slideToggle("fast");
+        }); 
+
+        $("#startdatetime").on("blur", function () {
+          var startdate = new Date($("#startdatetime").val());
+
+          if(startdate <= new Date()) {
+            $(".startdateiscurrent").show();
+            $(".formbutton").prop("disabled", true);
+        
+          } else {
+            $(".startdateiscurrent").hide();
+            $(".formbutton").prop("disabled", false);
+          }
         });
-    });                       
+
+        //Validate client data before submitting form
+        $("input[type='submit']").click(function () {
+          if ($("select[name='clientid']").val() == "") {
+            $("#clientname").prop("required", true);
+            $("#contactnumber").prop("required", true);
+            $("#emailaddress").prop("required", true);
+          } else {
+            $("#addcustomisedevent").submit();
+          }
+        });
+  
+  });                       
 </script>

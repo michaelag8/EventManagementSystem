@@ -50,12 +50,12 @@
 
                       <table width="200" border="0">
                         <tr>
-                          <td width="32%"><label>Name</label>&nbsp;</td>
+                          <td width="32%"><label>Name*</label>&nbsp;</td>
                           <td width="68%"><input name="eventname" type="text" id="eventname" maxlength="80" required autofocus value="<%=eventname%>"></td>
                         </tr>
                         
                         <tr>
-                          <td><label>Category</label>&nbsp;</td>
+                          <td><label>Category*</label>&nbsp;</td>
                           <td>
                             <p>
                               <label><input type="radio" name="category" value="Corporate" id="category_0"> Corporate</label>
@@ -66,22 +66,22 @@
                         </tr>
                         
                         <tr>
-                          <td><label>Location</label></td>
+                          <td><label>Location*</label></td>
                           <td><input name="location" type="text" id="location" maxlength="100" required value="<%=location%>"></td>
                         </tr>
                         
                         <tr>
-                          <td><label>Estimate Number Of Guests</label></td>
+                          <td><label>Estimate Number Of Guests*</label></td>
                           <td><input type="number" name="estnumguests" id="estnumguests" required min="1" value="<%=guestnum%>"></td>
                         </tr>
                             
                         <tr>
-                          <td><label>Cost</label></td>
+                          <td><label>Cost*</label></td>
                           <td><input type="number" name="cost" id="cost" required min="0.01" step="0.01" value="<%=cost%>"></td>
                         </tr>
                         
                         <tr>
-                          <td><label>Description</label></td>
+                          <td><label>Description*</label></td>
                           <td><textarea name="description" id="description" maxlength="200" required><%=desc%></textarea></td>
                         </tr>
                         

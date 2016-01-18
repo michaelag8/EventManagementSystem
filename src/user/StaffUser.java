@@ -1,5 +1,13 @@
 package user;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+
+import database.DBConnect;
 
 /**
  * This class refers to methods and data relating to the User.
@@ -12,7 +20,15 @@ public class StaffUser {
 	private String emailAddress;
 	private String firstName;
 	private String lastName;
-	private int userRole;
+	private String userRole;
+	private Date dateAdded;
+	private String contactNum;
+	
+	private Connection connection = null;
+    private Statement statement = null;
+    private PreparedStatement pstatement = null;
+    private ResultSet rs = null;
+    private String query = "";
 	
 	/**
 	 * @return the userid
@@ -89,14 +105,38 @@ public class StaffUser {
 	/**
 	 * @return the userRole
 	 */
-	public int getUserRole() {
+	public String getUserRole() {
 		return userRole;
 	}
 	/**
 	 * @param userRole the userRole to set
 	 */
-	public void setUserRole(int userRole) {
+	public void setUserRole(String userRole) {
 		this.userRole = userRole;
+	}
+	/**
+	 * @return the dateAdded
+	 */
+	public Date getDateAdded() {
+		return dateAdded;
+	}
+	/**
+	 * @param dateAdded the dateAdded to set
+	 */
+	public void setDateAdded(Date dateAdded) {
+		this.dateAdded = dateAdded;
+	}
+	/**
+	 * @return the contactNum
+	 */
+	public String getContactNum() {
+		return contactNum;
+	}
+	/**
+	 * @param contactNum the contactNum to set
+	 */
+	public void setContactNum(String contactNum) {
+		this.contactNum = contactNum;
 	}
 	/**
 	 * @param userName and password to validate user login
@@ -113,37 +153,163 @@ public class StaffUser {
 	}
 	/**
 	 * @param user bean to add user data to database
-	 * @return boolean to check if insert is successful
 	 */
-	public boolean addUser(StaffUser user) {
-		return true;
+	public void addUser(StaffUser user) throws SQLException {
+		
+		query = "INSERT INTO user (username, password, emailaddress, firstname, lastname, "
+				+ "userrole, contactnum) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		
+		try {
+    		connection = DBConnect.getConnection();
+    		pstatement = connection.prepareStatement(query);
+    		pstatement.setString(1 , user.getUserName());
+    		pstatement.setString(2 , user.getPassword());
+    		pstatement.setString(3 , user.getEmailAddress());
+    		pstatement.setString(4 , user.getFirstName());
+    		pstatement.setString(5 , user.getLastName());
+    		pstatement.setString(6 , user.getUserRole());
+    		pstatement.setString(7 , user.getContactNum());
+    		pstatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+        	pstatement.close();
+            connection.close();
+        }
 	}
 	/**
-	 * @param userName to reset user credentials
-	 * @return boolean to check if update is successful
+	 * @param user bean to update user data in database
 	 */
-	public boolean resetUserCredentials(String userName) {
-		return true;
+	public void resetUserCredentials(StaffUser user) throws SQLException {
+		
+		query = "UPDATE user SET username=?, password=? WHERE userid=? ";
+		
+		try {
+    		connection = DBConnect.getConnection();
+    		pstatement = connection.prepareStatement(query);
+    		pstatement.setString(1 , user.getUserName());
+    		pstatement.setString(2 , user.getPassword());
+    		pstatement.setInt(3 , user.getUserid());
+    		pstatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+        	pstatement.close();
+            connection.close();
+        }
+	}
+	/**
+	 * @param userid to select user in database
+	 * @return user bean to view current user
+	 */
+	public StaffUser viewUser(int userid) throws SQLException {
+		StaffUser user = null;
+		
+		query = "SELECT * FROM user where userid="+userid;
+    	
+    	try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            while (rs.next()) {
+            	user = new StaffUser();
+            	user.setUserid(rs.getInt("userid"));
+            	user.setUserName(rs.getString("username"));
+            	user.setEmailAddress(rs.getString("emailaddress"));
+            	user.setFirstName(rs.getString("firstname"));
+            	user.setLastName(rs.getString("lastname"));
+            	user.setUserRole(rs.getString("userrole"));
+            	user.setDateAdded(rs.getDate("dateadded"));
+            	user.setContactNum(rs.getString("contactnum"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
+    	
+		return user;
 	}
 	/**
 	 * @return ArrayList of users to view all current users
 	 */
-	public ArrayList<StaffUser> viewUsers() {
+	public ArrayList<StaffUser> viewUsers() throws SQLException {
 		ArrayList<StaffUser> users = new ArrayList<StaffUser>();
+		StaffUser user;
+		
+		query = "SELECT userid, username, firstname, lastname, userrole FROM user";
+    	
+    	try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            while (rs.next()) {
+            	user = new StaffUser();
+            	user.setUserid(rs.getInt("userid"));
+            	user.setUserName(rs.getString("username"));
+            	user.setFirstName(rs.getString("firstname"));
+            	user.setLastName(rs.getString("lastname"));
+            	user.setUserRole(rs.getString("userrole"));
+ 
+            	users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
+    	
 		return users;
 	}
 	/**
 	 * @param user bean to update user data in database
-	 * @return ArrayList of users to view all current users
 	 */
-	public boolean editUserDetails(StaffUser user) {
-		return true;
+	public void editUserDetails(StaffUser user) throws SQLException {
+		
+		query = "UPDATE user SET username=?, emailaddress=?, firstname=?,"
+				+ "lastname=?, userrole=?, contactnum=? WHERE userid=? ";
+		
+		try {
+    		connection = DBConnect.getConnection();
+    		pstatement = connection.prepareStatement(query);
+    		pstatement.setString(1 , user.getUserName());
+    		pstatement.setString(2 , user.getEmailAddress());
+    		pstatement.setString(3 , user.getFirstName());
+    		pstatement.setString(4 , user.getLastName());
+    		pstatement.setString(5 , user.getUserRole());
+    		pstatement.setString(6 , user.getContactNum());
+    		pstatement.setInt(7 , user.getUserid());
+    		pstatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+        	pstatement.close();
+            connection.close();
+        }
 	}
 	/**
 	 * @param userid to delete or remove in database
-	 * @return boolean to check if delete is successful
 	 */
-	public boolean deleteUser(int userid) {
-		return true;
+	public void deleteUser(int userid) throws SQLException {
+		
+		query = "DELETE FROM user where userid="+userid;
+		
+		try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
 	}
 }

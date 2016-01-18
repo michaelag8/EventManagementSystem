@@ -1,20 +1,15 @@
 <!doctype html>
 <html>
+<%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
+<jsp:useBean id="allusers" class="user.StaffUser" scope="request" />
+<%@ page import="user.StaffUser" %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - User</title>
 <link rel="stylesheet" href="css/styles.css" type="text/css" />
+<link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-<!--
-monopoly, a free CSS web template by ZyPOP (zypopwebtemplates.com/)
-
-Download: http://zypopwebtemplates.com/
-
-License: Creative Commons Attribution
-//-->
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 <body>
@@ -26,18 +21,32 @@ License: Creative Commons Attribution
 
         <jsp:directive.include file="include/sidemenu.html" />
 
-		<section id="content" class="two-column">
+		    <section id="content" class="two-column">
 
     	    <article>
-        	    <h3>Username</h3>
+            <% 
+              String userid = request.getParameter("id");
+              StaffUser user = null;
+
+              user = allusers.viewUser(Integer.parseInt(userid));
+              
+              if(user == null) {
+                response.sendRedirect("error.jsp");
+              }
+              String username = user.getUserName();
+              String email = user.getEmailAddress();
+              String completename = user.getFirstName() + " " + user.getLastName();
+              String role = user.getUserRole();
+              
+            %> 
+        	    <h3><%=username%></h3>
 
               <div id="refinesearch">
                 <button type="button" style="margin-left: 2px;" class="formbutton" id="resetcredentials" 
-                      onclick="document.location.href='resetcredentials.jsp';">Reset Credentials</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteuser" 
-                      onclick="document.location.href='editevent.jsp';">Delete User</button>
+                      onclick="document.location.href='resetcredentials.jsp?id=<%=userid%>';">Reset Credentials</button>
+                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteuser">Delete User</button>
                 <button type="button" style="margin-left: 2px;" class="formbutton" id="editdetails" 
-                      onclick="document.location.href='editevent.jsp';">Edit Details</button>
+                      onclick="document.location.href='edituser.jsp?id=<%=userid%>';">Edit Details</button>
               </div>
 
               <div id="main-content" >
@@ -45,23 +54,35 @@ License: Creative Commons Attribution
                   <table width="200" border="0">
                     <tr>
                       <td width="32%"><label>Username</label>&nbsp;</td>
-                      <td width="68%">username123</td>
+                      <td width="68%"><%=username%></td>
                     </tr>
                         
                     <tr>
                       <td><label>Email Address</label></td>
-                      <td>email@email.com</td>
+                      <td><%=email%></td>
                     </tr>
                         
                     <tr>
                       <td><label>Name</label></td>
-                      <td>Firstname + Lastname</td>
+                      <td><%=completename%></td>
                     </tr>
                            
                     <tr>
                       <td><label>Role</label></td>
-                      <td>Employee</td>
+                      <td><%=role%></td>
                     </tr>
+
+                    <% 
+                      if(role.equalsIgnoreCase("client")) {
+                    	  String contactnum = user.getContactNum();
+                   	%>
+                      	<tr>
+                          <td><label>Contact Number</label></td>
+                          <td><%=contactnum%></td>
+                        </tr>
+                    <%
+                      }
+                    %> 
                   
                   </table>
                 </fieldset>
@@ -75,5 +96,37 @@ License: Creative Commons Attribution
 
     <jsp:directive.include file="include/footer.html" />
 </div>
+<div id="deletedialog" style="display: none">
+  <p>Are you sure you want to delete this user?</p>
+  <form style="display: hidden" action="${pageContext.request.contextPath}/UserController" method="get" id="hiddendeleteform">
+    <input name="id" type="hidden" value="<%=userid%>">
+  </form>
+</div>
 </body>
 </html>
+
+<script language="javascript" type="text/javascript">
+  $(function () {
+
+        $("#deletedialog").dialog({
+          modal: true,
+          autoOpen: false,
+          width: 300,
+          resizable:false,
+          title:'Delete',
+          buttons: {
+            "Delete": function() {
+              $(this).dialog("close");
+              $("#hiddendeleteform").submit();
+            },
+            "Cancel": function() {
+              $(this).dialog("close");
+            }
+          } //End of button
+        });
+
+        $("#deleteuser").click(function () {
+          $("#deletedialog").dialog("open");
+        });
+  });                       
+</script>
