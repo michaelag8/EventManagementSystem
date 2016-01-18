@@ -8,7 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Event</title>
 <link rel="stylesheet" href="css/styles.css" type="text/css" />
+<link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 </head>
 <body>
@@ -54,9 +56,8 @@
                 <button type="button" style="margin-left: 2px;" class="formbutton" id="sendinvitation">Send Guest Invitations</button>
                 <button type="button" style="margin-left: 2px;" class="formbutton" id="givediscount">Give Discount</button>
                 <button type="button" style="margin-left: 2px;" class="formbutton" id="editevent" 
-                      onclick="document.location.href='editevent.jsp';">Edit Event</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteevent" 
-                      onclick="document.location.href='editevent.jsp';">Delete Event</button>
+                      onclick="document.location.href='editpresetevent.jsp?id=<%=eventid%>';">Edit Event</button>
+                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteevent">Delete Event</button>
               </div>
 
               <div id="main-content" >
@@ -158,11 +159,17 @@
                 
             </article>
         </section>
-        
+      
     	<div class="clear"></div>
     </div> <!-- end of body -->
 
     <jsp:directive.include file="include/footer.html" />
+</div>
+<div id="deletedialog" style="display: none">
+  <p>Are you sure you want to delete the event?</p>
+  <form style="display: hidden" action="${pageContext.request.contextPath}/PresetController" method="get" id="hiddendeleteform">
+    <input name="id" type="hidden" value="<%=eventid%>">
+  </form>
 </div>
 </body>
 </html>
@@ -172,5 +179,26 @@
         $("#additembutton").click(function () {
             $("#additem").slideToggle("fast");
         });
-    });                       
+
+        $("#deletedialog").dialog({
+          modal: true,
+          autoOpen: false,
+          width: 300,
+          resizable:false,
+          title:'Delete',
+          buttons: {
+            "Delete": function() {
+              $(this).dialog("close");
+              $("#hiddendeleteform").submit();
+            },
+            "Cancel": function() {
+              $(this).dialog("close");
+            }
+          } //End of button
+        });
+
+        $("#deleteevent").click(function () {
+          $("#deletedialog").dialog("open");
+        });
+  });                       
 </script>

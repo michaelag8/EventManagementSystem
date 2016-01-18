@@ -32,7 +32,7 @@ License: Creative Commons Attribution
 
                 <div id="main-content" >
                   <fieldset>
-                    <form action="${pageContext.request.contextPath}/AddPreset" method="post">
+                    <form action="${pageContext.request.contextPath}/PresetController" method="post">
                       <table width="200" border="0">
                         <tr>
                           <td width="32%"><label>Name*</label>&nbsp;</td>
@@ -71,7 +71,7 @@ License: Creative Commons Attribution
                         </tr>
                         
                         <tr>
-                          <td><input type="submit" style="margin-left: 2px;" class="formbutton" id="login-button" value="Submit" />&nbsp;</td>
+                          <td><input type="submit" style="margin-left: 2px;" class="formbutton" id="login-button" value="Add" name="action"/>&nbsp;</td>
                         </tr> 
                   
                       </table>

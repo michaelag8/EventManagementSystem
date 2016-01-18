@@ -273,10 +273,50 @@ public class Event implements Serializable  {
 		return events;
 	}
 	/**
+	 * @param event bean to edit event data to database
+	 * @return boolean to check if edit is successful
+	 */
+	public void editEvent(Event event) throws SQLException {
+		
+		query = "UPDATE presetevent SET eventname=?, category=?, location=?,"
+				+ "estimateguests=?, cost=?, description=? WHERE presetid=? ";
+		
+		try {
+    		connection = DBConnect.getConnection();
+    		pstatement = connection.prepareStatement(query);
+    		pstatement.setString(1 , event.getEventName());
+    		pstatement.setString(2 , event.getCategory());
+    		pstatement.setString(3 , event.getLocation());
+    		pstatement.setInt(4 , event.getEstGuestNumber());
+    		pstatement.setBigDecimal(5 , event.getEventCost());
+    		pstatement.setString(6 , event.getDescription());
+    		pstatement.setInt(7 , event.getEventid());
+    		pstatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+        	pstatement.close();
+            connection.close();
+        }
+	}
+	/**
 	 * @param eventid to delete or remove in database
 	 */
-	public void deleteEvent(int eventid) {
+	public void deleteEvent(int eventid) throws SQLException {
 		
+		query = "DELETE presetevent where presetid="+eventid;
+		
+		try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
 	}
 	/**
 	 * @param eventid and client data to book event

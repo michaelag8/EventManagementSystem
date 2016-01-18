@@ -6,11 +6,11 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
   <servlet>
-  	<servlet-name>AddPreset</servlet-name>
-  	<servlet-class>servlet.AddPreset</servlet-class>
+  	<servlet-name>PresetController</servlet-name>
+  	<servlet-class>servlet.PresetController</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>AddPreset</servlet-name>
-  	<url-pattern>/AddPreset</url-pattern>
+  	<servlet-name>PresetController</servlet-name>
+  	<url-pattern>/PresetController</url-pattern>
   </servlet-mapping>
 </web-app>
