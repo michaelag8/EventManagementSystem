@@ -312,4 +312,64 @@ public class StaffUser {
             connection.close();
         }
 	}
+	/**
+	 * @param userid to select username in database
+	 * @return user full name
+	 */
+	public String getUsernameById(int userid) throws SQLException {
+		String fullname = "";
+		
+		query = "SELECT firstname, lastname FROM user where userid="+userid;
+    	
+    	try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            while (rs.next()) {
+            	String firstname = rs.getString("firstname");
+            	String lastname = rs.getString("lastname");
+            	
+            	fullname = firstname + " " + lastname;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
+    	
+		return fullname;
+	}
+	/**
+	 * @return ArrayList of users to view all staff users
+	 */
+	public ArrayList<StaffUser> viewAllStaff() throws SQLException {
+		ArrayList<StaffUser> staff = new ArrayList<StaffUser>();
+		StaffUser user;
+		
+		query = "SELECT userid, firstname, lastname FROM user WHERE userrole='Employee'";
+    	
+    	try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            while (rs.next()) {
+            	user = new StaffUser();
+            	user.setUserid(rs.getInt("userid"));
+            	user.setFirstName(rs.getString("firstname"));
+            	user.setLastName(rs.getString("lastname"));
+ 
+            	staff.add(user);	
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
+    	
+		return staff;
+	}
 }

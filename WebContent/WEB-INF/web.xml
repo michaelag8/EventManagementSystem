@@ -21,4 +21,12 @@
     <servlet-name>UserController</servlet-name>
     <url-pattern>/UserController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>ItemController</servlet-name>
+    <servlet-class>servlet.ItemController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ItemController</servlet-name>
+    <url-pattern>/ItemController</url-pattern>
+  </servlet-mapping>
 </web-app>

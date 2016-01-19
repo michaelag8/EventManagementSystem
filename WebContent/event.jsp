@@ -2,7 +2,10 @@
 <html>
 <%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
 <jsp:useBean id="presetevents" class="event.Event" scope="request" />
+<jsp:useBean id="allitems" class="event.EventDetails" scope="request" />
+<jsp:useBean id="staffname" class="user.StaffUser" scope="request" />
 <%@ page import="event.Event" %>
+<%@ page import="event.EventDetails" %>
 <%@ page import="java.math.BigDecimal" %>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -96,66 +99,68 @@
                 <h4>Items</h4>
 
                 <table width="200" border="0">
-                  <tr>
-                    <td width="32%"><label>Item Name</label>&nbsp;</td>
-                    <td width="68%">Speakers</td>
-                  </tr>
-                        
-                  <tr>
-                    <td><label>Item Type</label></td>
-                    <td>AV</td>
-                  </tr>
-                        
-                  <tr>
-                    <td><label>Description</label></td>
-                    <td>Le sounds</td>
-                  </tr>
-                           
-                  <tr>
-                    <td><label>Staff Assigned</label></td>
-                    <td>Staff Number 1</td>
-                  </tr>  
+                  <% 
+                    int ispreset = 0;
+                    if(type.equalsIgnoreCase("preset")) {
+                      ispreset = 1;
+                    }
 
-                  <tr>
-                    <td>
-                      <button type="button" style="margin-left: 2px;" class="formbutton" id="edititem">Edit</button>
-                      <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteitem">Delete</button>
-                    </td>
-                  </tr>
+                    ArrayList<EventDetails> items = allitems.viewEventDetails(Integer.parseInt(eventid), ispreset);
+                    if(!items.isEmpty()) {
+                      for (EventDetails item : items) {
+                        int itemid = item.getItemid();
+                        String itemname = item.getItemName();
+                        String itemtype = item.getItemType();
+                        String itemdesc = item.getItemDescription();
+                        int staffid = item.getStaffAssigned();
+                        String staffassigned = staffname.getUsernameById(staffid);
+                  %>
+
+                        <tr>
+                          <td width="32%"><label>Item Name</label>&nbsp;</td>
+                          <td width="68%"><%=itemname%></td>
+                        </tr>
+                              
+                        <tr>
+                          <td><label>Item Type</label></td>
+                          <td><%=itemtype%></td>
+                        </tr>
+                              
+                        <tr>
+                          <td><label>Description</label></td>
+                          <td><%=itemdesc%></td>
+                        </tr>
+                                 
+                        <tr>
+                          <td><label>Staff Assigned</label></td>
+                          <td><%=staffassigned%></td>
+                        </tr>  
+
+                        <tr>
+                          <td>
+                            <button type="button" style="margin-left: 2px;" class="formbutton" id="edititem" 
+                                  onclick="document.location.href='edititem.jsp?id=<%=itemid%>&event=<%=eventid%>&type=<%=type%>';">Edit Item</button>
+                            <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteitem" 
+                                  onclick="document.location.href='${pageContext.request.contextPath}/ItemController?id=<%=itemid%>&eventid=<%=eventid%>&preset=<%=ispreset%>';">Delete Item</button>
+                          </td>
+                        </tr>
+                  <%
+                      } 
+                    } else {
+                  %>
+                        <tr> 
+                          <td>No Items to Display</td>
+                        </tr>
+                  <%
+                    }
+                  %>
                 </table>
               </div>
 
               <div id="refinesearch">
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="additembutton">Add New Item</button>
+                <button type="button" style="margin-left: 2px;" class="formbutton" id="additembutton" 
+                      onclick="document.location.href='additem.jsp?event=<%=eventid%>&type=<%=type%>';">Add New Item</button>
               </div>
-
-              <div id="additem">
-                  <table width="200" border="0">
-                    <tr>
-                      <td width="32%"><label>Item Name</label></td>
-                      <td width="68%"><input type="text" name="itemname" id="itemname"></td>
-                    </tr>
-                    
-                    <tr>
-                      <td><label>Item type</label></td>
-                      <td><input type="text" name="itemtype" id="itemtype"></td>
-                    </tr>
-                    
-                    <tr>
-                      <td><label>Item Description</label></td>
-                      <td><textarea name="description" id="10" maxlength="200"></textarea></td>
-                    </tr>
-                    
-                    <tr>
-                      <td><label>Staff to Assign</label></td>
-                      <td>
-                        <select>
-                          <option value="item 1" >item1 </option>
-                        </select>
-                      </td>
-                    </tr>
-                  </table>
-                </div> <!-- end of additem -->
                 
             </article>
         </section>
@@ -165,9 +170,9 @@
 
     <jsp:directive.include file="include/footer.html" />
 </div>
-<div id="deletedialog" style="display: none">
+<div id="deleteeventdialog" style="display: none">
   <p>Are you sure you want to delete the event?</p>
-  <form style="display: hidden" action="${pageContext.request.contextPath}/PresetController" method="get" id="hiddendeleteform">
+  <form style="display: hidden" action="${pageContext.request.contextPath}/PresetController" method="get" id="hiddendeleteeventform">
     <input name="id" type="hidden" value="<%=eventid%>">
   </form>
 </div>
@@ -176,11 +181,7 @@
 
 <script language="javascript" type="text/javascript">
   $(function () {
-        $("#additembutton").click(function () {
-            $("#additem").slideToggle("fast");
-        });
-
-        $("#deletedialog").dialog({
+        $("#deleteeventdialog").dialog({
           modal: true,
           autoOpen: false,
           width: 300,
@@ -189,7 +190,7 @@
           buttons: {
             "Delete": function() {
               $(this).dialog("close");
-              $("#hiddendeleteform").submit();
+              $("#hiddendeleteeventform").submit();
             },
             "Cancel": function() {
               $(this).dialog("close");
@@ -198,7 +199,7 @@
         });
 
         $("#deleteevent").click(function () {
-          $("#deletedialog").dialog("open");
+          $("#deleteeventdialog").dialog("open");
         });
   });                       
 </script>

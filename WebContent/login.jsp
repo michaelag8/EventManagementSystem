@@ -34,11 +34,12 @@ License: Creative Commons Attribution
                 <form action="#" method="post">
                   
                   <p>
-                    <label for="name">Username</label><input name="name" id="name" value="" type="text" maxlength="20" />
-                    <label for="Password">Password</label><input name="Password" id="Password" value="" type="password" maxlength="20" />
+                    <label for="name">Username</label><input name="name" id="name" type="text" maxlength="20" required autofocus pattern="^[a-zA-Z0-9_ ]*$" />
+                    <label for="Password">Password</label><input name="password" id="password" type="password" maxlength="20" required autofocus 
+                        pattern="(?=^.{8,20}$)^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"/>
                   </p>
                   <p>
-                    <input name="send" style="margin-left: 2px;" class="formbutton" value="Login" type="submit" />
+                    <input name="loginbutton" style="margin-left: 2px;" class="formbutton" value="Login" type="submit" />
                   </p>
 
                 </form>

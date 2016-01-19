@@ -35,11 +35,12 @@ public class ClientUser extends StaffUser {
 	public void setAccountAge(int accountAge) {
 		this.accountAge = accountAge;
 	}
-	
+
 	/**
 	 * @return ArrayList of users to view all client users
 	 */
-	public ArrayList<StaffUser> viewClients() throws SQLException {
+	@Override
+	public ArrayList<StaffUser> viewUsers() throws SQLException {
 		ArrayList<StaffUser> users = new ArrayList<StaffUser>();
 		StaffUser user;
 		
@@ -56,7 +57,7 @@ public class ClientUser extends StaffUser {
             	user.setFirstName(rs.getString("firstname"));
             	user.setLastName(rs.getString("lastname"));
  
-            	users.add(user);
+            	users.add(user);	
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,4 +68,5 @@ public class ClientUser extends StaffUser {
     	
 		return users;
 	}
+	
 }

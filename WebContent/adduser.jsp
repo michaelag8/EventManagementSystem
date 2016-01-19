@@ -27,7 +27,7 @@
               <table width="200" border="0">
                 <tr>
                   <td width="32%"><label>Username*</label>&nbsp;</td>
-                  <td width="68%"><input name="username" type="text" id="username" maxlength="20" required autofocus></td>
+                  <td width="68%"><input name="username" type="text" id="username" maxlength="20" required autofocus pattern="^[a-zA-Z0-9_ ]*$"></td>
                 </tr>
           
                 <tr>
@@ -55,12 +55,12 @@
           
                 <tr>
                   <td width="32%"><label>First Name*</label>&nbsp;</td>
-                  <td width="68%"><input name="firstname" type="text" id="firstname" maxlength="30" required></td>
+                  <td width="68%"><input name="firstname" type="text" id="firstname" maxlength="30" required pattern="^[a-zA-Z ]*$"></td>
                 </tr>
                 
                 <tr>
                   <td width="32%"><label>Last Name*</label>&nbsp;</td>
-                  <td width="68%"><input name="lastname" type="text" id="lastname" maxlength="30" required></td>
+                  <td width="68%"><input name="lastname" type="text" id="lastname" maxlength="30" required pattern="^[a-zA-Z ]*$"></td>
                 </tr>
           
                 <tr>

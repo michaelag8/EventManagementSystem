@@ -83,7 +83,7 @@
                     <select id="clientlist" name="clientid">
                       <option value="" >---Select an option---</option>
                       <% 
-                        ArrayList<StaffUser> clients = allclients.viewClients();
+                        ArrayList<StaffUser> clients = allclients.viewUsers();
                         if(!clients.isEmpty()) {
                           for (StaffUser client : clients) {
                             int userid = client.getUserid();
