@@ -32,6 +32,11 @@ th {
 
 td {
 	border-bottom: 1px solid #ccc;
+	font-size: 95%;
+}
+
+td#noborder{
+	border-bottom: none;
 }
 
 code, blockquote {

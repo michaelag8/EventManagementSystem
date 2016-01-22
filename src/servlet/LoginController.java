@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +74,8 @@ public class LoginController extends HttpServlet {
 			
 		} else {
 			request.setAttribute("loginerror", "Invalid username or password.");
-			response.sendRedirect("login.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			rd.forward(request, response);
 		}
 	}
 

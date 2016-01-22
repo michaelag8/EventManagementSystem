@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2016 at 01:21 PM
+-- Generation Time: Jan 22, 2016 at 09:24 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -31,11 +31,11 @@ CREATE TABLE IF NOT EXISTS `event` (
   `eventname` varchar(80) NOT NULL,
   `eventtype` varchar(15) NOT NULL COMMENT 'customised / pre-set',
   `category` varchar(15) NOT NULL COMMENT 'corporate, social, private',
-  `startdatetime` timestamp NOT NULL,
-  `enddatetime` timestamp NOT NULL,
+  `startdatetime` timestamp NULL DEFAULT NULL,
+  `enddatetime` timestamp NULL DEFAULT NULL,
   `location` varchar(100) NOT NULL,
   `estimateguests` smallint(6) NOT NULL,
-  `confirmedguests` smallint(6) NOT NULL,
+  `confirmedguests` smallint(6) DEFAULT '0',
   `cost` decimal(10,2) NOT NULL,
   `description` varchar(200) NOT NULL,
   `clientid` int(11) DEFAULT NULL,
@@ -46,7 +46,16 @@ CREATE TABLE IF NOT EXISTS `event` (
   `bookingdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`eventid`),
   KEY `clientid` (`clientid`,`presetid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `event`
+--
+
+INSERT INTO `event` (`eventid`, `eventname`, `eventtype`, `category`, `startdatetime`, `enddatetime`, `location`, `estimateguests`, `confirmedguests`, `cost`, `description`, `clientid`, `clientname`, `clientcontactnum`, `clientemail`, `presetid`, `bookingdate`) VALUES
+(1, 'Custom Event 1', 'custom', 'Corporate', '2016-01-28 13:30:00', '2016-01-28 15:45:00', 'Custom Event Hall', 50, 0, '2000.00', 'This is a sample custom event for view purposes.', 8, 'Clientfirst ClientLast', '07985693123', 'client1@email.com', NULL, '2016-01-22 14:22:39'),
+(4, 'Custom2', 'custom', 'Social', '2016-02-03 00:00:00', '2016-02-03 00:00:00', 'Building', 30, 0, '1500.00', 'This is a sample event for add custom event.', NULL, 'Samplename Samplelast', '07985693123', 'sample@email.com', NULL, '2016-01-22 18:28:30'),
+(5, 'Custom Event3', 'custom', 'Private', '2016-02-02 00:00:00', '2016-02-02 00:00:00', 'Spa Building', 3, 0, '500.00', 'This is a sample event for add custom event 2.', NULL, 'Clientfirst Clientlast', '07985693123', 'client1@email.com', NULL, '2016-01-22 18:36:11');
 
 -- --------------------------------------------------------
 
@@ -104,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `presetevent` (
   `cost` decimal(10,2) NOT NULL,
   `description` varchar(200) NOT NULL,
   PRIMARY KEY (`presetid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `presetevent`
@@ -141,9 +150,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`userid`, `username`, `password`, `emailaddress`, `firstname`, `lastname`, `userrole`, `dateadded`, `contactnum`) VALUES
 (3, 'username1', '$2a$10$EbI2AOZ5pIhhejv1b9FVP.ErZ4kZsTfeLApTN4wAIXalyvnDCa8yW', 'email@email.com', 'Firstname', 'Lastname', 'Employee', '2016-01-18 18:26:03', NULL),
-(8, 'client1', '$2a$10$NH3VlLODeWxgn8j8CVT6cu/T1DCe6n/7YXLD549ElwvEiMLcveaRG', 'client1@email.com', 'Clientfirst', 'Clientlast', 'Client', '2016-01-18 20:48:48', '07985693123'),
+(8, 'client1', '$2a$10$DyJEBTqPwVu5TGWRL5utd.fWmbflGBe61EEsjZogxZjkow5tObpvC', 'client1@email.com', 'Clientfirst', 'Clientlast', 'Client', '2016-01-18 20:48:48', '07985693123'),
 (9, 'client2', '$2a$10$11BaMsBYIG6smBjJJ8OvDOm4goWPIRS9e9zgCpujPlz3jktfoEfm.', 'client2@email.com', 'ClientFirst2', 'ClientLast2', 'Client', '2016-01-18 20:49:31', '07876653432'),
-(10, 'staff1', '$2a$10$rmLLQGMuODK.oNaIH2YZlefYKB769SgDD7FKGD5doEoIqCxPqzQBW', 'staff1@email.com', 'StaffFirst', 'StaffLast', 'Employee', '2016-01-19 14:14:49', NULL),
+(10, 'staff1', '$2a$10$hTsyEj5H3T/CfpII38t10O9V7CMkVR.jLOpYTiasMR08dooZ1fw9S', 'staff1@email.com', 'StaffFirst', 'StaffLast', 'Employee', '2016-01-19 14:14:49', NULL),
 (11, 'AdminUsername', '$2a$10$jBXwXyzucFdvYuCq5GXsBOvAgK6X8JsLv6/jFyRnTY09rbvn0kkQy', 'admin@email.com', 'FirstAdmin', 'LastAdmin', 'Admin', '2016-01-19 18:03:27', NULL);
 
 --

@@ -68,5 +68,36 @@ public class ClientUser extends StaffUser {
     	
 		return users;
 	}
+	/**
+	 * @param userid to select client data in database
+	 * @return clientuser bean
+	 */
+	public ClientUser getCustomEventClientData(int userid) throws SQLException {
+		ClientUser client = null;
+		
+		query = "SELECT firstname, lastname, emailaddress, contactnum FROM user where userid="+userid;
+    	
+    	try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            while (rs.next()) {
+            	client = new ClientUser();
+            	client.setFirstName(rs.getString("firstname"));
+            	client.setLastName(rs.getString("lastname"));
+            	client.setEmailAddress(rs.getString("emailaddress"));
+            	client.setContactNum(rs.getString("contactnum"));
+            	
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
+    	
+		return client;
+	}
 	
 }

@@ -27,19 +27,10 @@
                   <p>
                     <label for="name">Username</label><input name="username" id="username" type="text" maxlength="20" required autofocus 
                         pattern="^([a-zA-Z0-9_ ]){8,20}*$" />
-                    <label for="Password">Password</label><input name="password" id="password" type="password" maxlength="20" required autofocus 
+                    <label for="Password">Password</label><input name="password" id="password" type="password" maxlength="20" required 
                         pattern="(?=^.{8,20}$)^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"/>
                   </p>
-                  <span id="validationrules">
-                    <% 
-                      String errormsg = (String)request.getAttribute("loginerror"); 
-
-                      if(errormsg!=null) {
-                        out.print(errormsg);
-                      }
-                      
-                    %>
-                  </span>
+                  <span id="validationrules">${loginerror}</span>
                   <p>
                     <input name="loginbutton" id="loginbutton" style="margin-left: 2px;" class="formbutton" value="Login" type="submit" />
                   </p>

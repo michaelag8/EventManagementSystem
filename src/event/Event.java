@@ -32,6 +32,7 @@ public class Event implements Serializable  {
 	private BigDecimal eventCost;
 	private String description;
 	private ClientUser clientSigned;
+	private Date bookingdate;
 	
 	private Connection connection = null;
     private Statement statement = null;
@@ -182,6 +183,18 @@ public class Event implements Serializable  {
 	 */
 	public void setClientSigned(ClientUser clientSigned) {
 		this.clientSigned = clientSigned;
+	}
+	/**
+	 * @return the bookingdate
+	 */
+	public Date getBookingdate() {
+		return bookingdate;
+	}
+	/**
+	 * @param bookingdate the bookingdate to set
+	 */
+	public void setBookingdate(Date bookingdate) {
+		this.bookingdate = bookingdate;
 	}
 	/**
 	 * @param event bean to add event data to database

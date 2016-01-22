@@ -14,6 +14,14 @@
     <url-pattern>/PresetController</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>CustomController</servlet-name>
+    <servlet-class>servlet.CustomController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomController</servlet-name>
+    <url-pattern>/CustomController</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>UserController</servlet-name>
     <servlet-class>servlet.UserController</servlet-class>
   </servlet>

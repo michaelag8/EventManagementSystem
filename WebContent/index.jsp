@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
 <%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
+<jsp:useBean id="customevents" class="event.CustomisedEvent" scope="request" />
+<%@ page import="event.Event" %>
 <%
     String pagesessionrole = "";
 	if(session.getAttribute("session_isloggedin") != null) {
@@ -49,15 +51,41 @@
                           <tr>
                             <th>Event Name</th>
                             <th>Category</th>
-                            <th>Date</th>
+                            <th>Booking Date</th>
+                            <th>Event Date</th>
                           </tr> 
                         </thead>
 
                         <tbody>
+                            <% 
+                                ArrayList<Event> events = customevents.viewAllEvents();
+                                if(!events.isEmpty()) {
+                                    for (Event event : events) {
+                                        int eventid = event.getEventid();
+                                        String eventname = event.getEventName();
+                                        String category = event.getCategory();
+                                        Date bookingdate = event.getBookingdate();
+                                        Date eventdate = event.getStartDatetime();
+                                        String url = "event.jsp?id=" + eventid + "&type=custom";
+                            %>
+                                        <tr> 
+                                          <td width="50%"><a href=<%=url%>> <%=eventname%> </a></td>
+                                          <td width="10%"><%=category%></td>
+                                          <td width="20%"><%=bookingdate%></td>
+                                          <td width="20%"><%=eventdate%></td>
+                                        </tr>
+                            <%
+                                    } 
+                                } else {
+                            %>
+                                    <tr> 
+                                      <td colspan="3">No Events to Display</td>
+                                    </tr>
+                            <%
+                                }
+                            %>
                             <tr>
-                              <td width="50%"><a href="event.jsp">Event Name One</a></td>
-                              <td width="30%">Corporate</td>
-                              <td width="20%">Date here</td>
+                              
                             </tr>
                         </tbody>    
                     </table> <!--end of table-->

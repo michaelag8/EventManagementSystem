@@ -39,7 +39,7 @@
 
         <div id="main-content" >
           <fieldset>
-            <form action="#" method="post" id="addcustomisedevent">
+            <form action="${pageContext.request.contextPath}/CustomController" method="post" id="addcustomisedevent">
               <table width="200" border="0">
                 <tr>
                   <td width="32%"><label>Name*</label>&nbsp;</td>
@@ -60,14 +60,14 @@
                 <tr>
                   <td><label>Start Date and Time*</label></td>
                   <td>
-                    <input type="datetime-local" id="date" name="startdatetime" class="date" required/>
+                    <input type="datetime-local" id="startdatetime" name="startdatetime" class="date" step="1" required/>
                     <span id="validationrules" class="startdateiscurrent" style="display:none">Event date cannot be current date.</span>
                   </td>
                 </tr>
                 
                 <tr>
                   <td><label>End Date and Time*</label></td>
-                  <td><input type="datetime-local" id="date" name="enddatetime" class="date" required /></td>
+                  <td><input type="datetime-local" id="enddatetime" name="enddatetime" class="date" step="1" required /></td>
                 </tr>
                 
                 <tr>
@@ -94,7 +94,7 @@
                   <td><label>Client Name</label>&nbsp;</td>
                   <td>
                     <select id="clientlist" name="clientid">
-                      <option value="" >---Select an option---</option>
+                      <option value="0" >---Select an option---</option>
                       <% 
                         ArrayList<StaffUser> clients = allclients.viewUsers();
                         if(!clients.isEmpty()) {
@@ -129,7 +129,7 @@
                 </tbody>
 
                 <tr>
-                  <td><input type="submit" style="margin-left: 2px;" class="formbutton" id="login-button" value="Add" />&nbsp;</td>
+                  <td><input type="submit" style="margin-left: 2px;" class="formbutton" id="login-button" value="Add" name="action"/>&nbsp;</td>
                 </tr> 
           
               </table>
