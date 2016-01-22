@@ -1,5 +1,19 @@
 <!doctype html>
 <html>
+<%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
+<%
+  String pagesessionrole = "";
+  if(session.getAttribute("session_isloggedin") != null) {
+    pagesessionrole = (String)session.getAttribute("session_userrole");  
+
+    if(!pagesessionrole.equalsIgnoreCase("admin")) {
+      response.sendRedirect("index.jsp");
+    } 
+                  
+  } else {
+    response.sendRedirect("presetevents.jsp");
+  }
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Add User</title>
@@ -10,11 +24,11 @@
 <body>
 <div id="container">
 
-  <jsp:directive.include file="include/header.html" />
+  <jsp:directive.include file="include/header.jsp" />
 
   <div id="body" class="width">
 
-    <jsp:directive.include file="include/sidemenu.html" />
+    <jsp:directive.include file="include/sidemenu.jsp" />
 
 		<section id="content" class="two-column">
 
@@ -27,7 +41,7 @@
               <table width="200" border="0">
                 <tr>
                   <td width="32%"><label>Username*</label>&nbsp;</td>
-                  <td width="68%"><input name="username" type="text" id="username" maxlength="20" required autofocus pattern="^[a-zA-Z0-9_ ]*$"></td>
+                  <td width="68%"><input name="username" type="text" id="username" maxlength="20" required autofocus pattern="^([a-zA-Z0-9_ ]){8,20}*$"></td>
                 </tr>
           
                 <tr>

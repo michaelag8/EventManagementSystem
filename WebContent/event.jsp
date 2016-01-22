@@ -7,6 +7,22 @@
 <%@ page import="event.Event" %>
 <%@ page import="event.EventDetails" %>
 <%@ page import="java.math.BigDecimal" %>
+<%
+  String pagesessionrole = "";
+  int client = 0;
+  int loggedin = 0;
+  if(session.getAttribute("session_isloggedin") != null) {
+    loggedin = 1;
+    pagesessionrole = (String)session.getAttribute("session_userrole");  
+
+    if(pagesessionrole.equalsIgnoreCase("client")) {
+      client = 1;
+    }   
+
+  } else {
+    client = 1;
+  }
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Event</title>
@@ -19,11 +35,11 @@
 <body>
 <div id="container">
 
-    <jsp:directive.include file="include/header.html" />
+    <jsp:directive.include file="include/header.jsp" />
 
     <div id="body" class="width">
 
-        <jsp:directive.include file="include/sidemenu.html" />
+        <jsp:directive.include file="include/sidemenu.jsp" />
 
 		<section id="content" class="two-column">
 
@@ -56,11 +72,26 @@
 
               <div id="refinesearch">
                 <button type="button" style="margin-left: 2px;" class="formbutton" id="bookevent">Book Event</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="sendinvitation">Send Guest Invitations</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="givediscount">Give Discount</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="editevent" 
-                      onclick="document.location.href='editpresetevent.jsp?id=<%=eventid%>';">Edit Event</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteevent">Delete Event</button>
+                
+                <%
+                  if(client ==1  && loggedin == 1) {
+                %>
+                     <button type="button" style="margin-left: 2px;" class="formbutton" id="sendinvitation">Send Guest Invitations</button>
+                <%             
+                  } else {
+                      if(pagesessionrole.equalsIgnoreCase("manager")) {
+                %>
+                        <button type="button" style="margin-left: 2px;" class="formbutton" id="givediscount">Give Discount</button>
+                <%
+                      }
+                %>
+                    <button type="button" style="margin-left: 2px;" class="formbutton" id="editevent" 
+                          onclick="document.location.href='editpresetevent.jsp?id=<%=eventid%>';">Edit Event</button>
+                    <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteevent">Delete Event</button>
+                <%
+                  }
+                %>
+
               </div>
 
               <div id="main-content" >
@@ -136,14 +167,21 @@
                           <td><%=staffassigned%></td>
                         </tr>  
 
-                        <tr>
-                          <td>
-                            <button type="button" style="margin-left: 2px;" class="formbutton" id="edititem" 
-                                  onclick="document.location.href='edititem.jsp?id=<%=itemid%>&event=<%=eventid%>&type=<%=type%>';">Edit Item</button>
-                            <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteitem" 
-                                  onclick="document.location.href='${pageContext.request.contextPath}/ItemController?id=<%=itemid%>&eventid=<%=eventid%>&preset=<%=ispreset%>';">Delete Item</button>
-                          </td>
-                        </tr>
+                        <%
+                          if(client != 0  && loggedin == 1) { //Show edit and delete item button if not client and loggedin
+                        %>
+                            <tr>
+                              <td>
+                                <button type="button" style="margin-left: 2px;" class="formbutton" id="edititem" 
+                                      onclick="document.location.href='edititem.jsp?id=<%=itemid%>&event=<%=eventid%>&type=<%=type%>';">Edit Item</button>
+                                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteitem" 
+                                      onclick="document.location.href='${pageContext.request.contextPath}/ItemController?id=<%=itemid%>&eventid=<%=eventid%>&preset=<%=ispreset%>';">Delete Item</button>
+                              </td>
+                            </tr>
+                        <%
+                          }
+                        %>
+                  
                   <%
                       } 
                     } else {
@@ -158,8 +196,14 @@
               </div>
 
               <div id="refinesearch">
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="additembutton" 
-                      onclick="document.location.href='additem.jsp?event=<%=eventid%>&type=<%=type%>';">Add New Item</button>
+                <%
+                  if(client != 0 && loggedin == 1) { //Show add new item button only if not client and loggedin
+                %>
+                    <button type="button" style="margin-left: 2px;" class="formbutton" id="additembutton" 
+                          onclick="document.location.href='additem.jsp?event=<%=eventid%>&type=<%=type%>';">Add New Item</button>
+                <%
+                  }
+                %>
               </div>
                 
             </article>
@@ -174,6 +218,27 @@
   <p>Are you sure you want to delete the event?</p>
   <form style="display: hidden" action="${pageContext.request.contextPath}/PresetController" method="get" id="hiddendeleteeventform">
     <input name="id" type="hidden" value="<%=eventid%>">
+  </form>
+</div>
+<div id="bookeventdialog" style="display: none">
+  <form action="${pageContext.request.contextPath}/EventController" method="get" id="hiddenbookeventform">
+    <input name="id" type="hidden" value="<%=eventid%>">
+    <table width="200" border="0">
+      <tr>
+        <td><label>New Client Name </label>&nbsp;</td>
+        <td><input name="clientname" type="text" id="clientname" maxlength="80"></td>
+      </tr>
+
+      <tr>
+        <td><label>Contact Number</label></td>
+        <td><input type="text" name="contactnumber" id="contactnumber" pattern="^\s*\(?(020[7,8]{1}\)?[ ]?[1-9]{1}[0-9{2}[ ]?[0-9]{4})|(0[1-8]{1}[0-9]{3}\)?[ ]?[1-9]{1}[0-9]{2}[ ]?[0-9]{3})\s*$"></td>
+      </tr>
+
+      <tr>
+        <td><label>Email Address</label>&nbsp;</td>
+        <td><input name="emailaddress" type="email" id="emailaddress" maxlength="50"></td>
+      </tr>
+    </table>
   </form>
 </div>
 </body>
@@ -198,8 +263,29 @@
           } //End of button
         });
 
+        $("#bookeventdialog").dialog({
+          modal: true,
+          autoOpen: false,
+          width: 500,
+          resizable:false,
+          title:'Book',
+          buttons: {
+            "Book": function() {
+              $(this).dialog("close");
+              $("#hiddenbookeventform").submit();
+            },
+            "Cancel": function() {
+              $(this).dialog("close");
+            }
+          } //End of button
+        });
+
         $("#deleteevent").click(function () {
           $("#deleteeventdialog").dialog("open");
+        });
+
+        $("#bookevent").click(function () {
+          $("#bookeventdialog").dialog("open");
         });
   });                       
 </script>

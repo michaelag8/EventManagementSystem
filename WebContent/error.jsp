@@ -19,7 +19,7 @@ License: Creative Commons Attribution
 <body>
 <div id="container">
 
-    <jsp:directive.include file="/include/header.html" />
+    <jsp:directive.include file="/include/header.jsp" />
 
     <div id="body" class="width">
         <div id="main-content">

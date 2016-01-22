@@ -29,4 +29,12 @@
     <servlet-name>ItemController</servlet-name>
     <url-pattern>/ItemController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>LoginController</servlet-name>
+    <servlet-class>servlet.LoginController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginController</servlet-name>
+    <url-pattern>/LoginController</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import database.DBConnect;
+import util.BCrypt;
 
 /**
  * This class refers to methods and data relating to the User.
@@ -140,16 +141,45 @@ public class StaffUser {
 	}
 	/**
 	 * @param userName and password to validate user login
-	 * @return boolean to check if login is successful
+	 * @return userid for successful login and 0 for unsuccessful
 	 */
-	public boolean login(String userName, String password) {
-		return true;
-	}
-	/**
-	 * method to logout
-	 */
-	public void logout() {
+	public int login(String userName, String password) throws SQLException {
+		int success = 0;
+		StaffUser user = null;
 		
+		query = "SELECT * FROM user where username='"+userName+"'";
+		
+		try {
+    		connection = DBConnect.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            while (rs.next()) {
+            	user = new StaffUser();
+            	user.setUserid(rs.getInt("userid"));
+            	user.setUserName(rs.getString("username"));
+            	user.setPassword(rs.getString("password"));
+            	user.setUserRole(rs.getString("userrole"));
+            	
+            	success = user.getUserid();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally  {
+            statement.close();
+            connection.close();
+        }
+		
+		boolean validpassword = false;
+		if(success != 0) {
+			//Check if password matches
+			validpassword = BCrypt.checkpw(password, user.getPassword());
+			if(!validpassword) {
+				success = 0;
+			}
+		}
+		
+		return success;
 	}
 	/**
 	 * @param user bean to add user data to database

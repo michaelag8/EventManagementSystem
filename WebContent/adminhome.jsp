@@ -3,6 +3,19 @@
 <%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
 <jsp:useBean id="allusers" class="user.StaffUser" scope="request" />
 <%@ page import="user.StaffUser" %>
+<%
+  String pagesessionrole = "";
+  if(session.getAttribute("session_isloggedin") != null) {
+    pagesessionrole = (String)session.getAttribute("session_userrole");  
+
+    if(!pagesessionrole.equalsIgnoreCase("admin")) {
+      response.sendRedirect("index.jsp");
+    } 
+                  
+  } else {
+    response.sendRedirect("presetevents.jsp");
+  }
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Admin</title>
@@ -12,7 +25,7 @@
 <body>
 <div id="container">
 
-  <jsp:directive.include file="include/header.html" />
+  <jsp:directive.include file="include/header.jsp" />
 
   <div id="body" class="width">
 

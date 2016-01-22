@@ -3,6 +3,19 @@
 <%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
 <jsp:useBean id="presetevents" class="event.Event" scope="request" />
 <%@ page import="event.Event" %>
+<%
+  String pagesessionrole = "";
+  if(session.getAttribute("session_isloggedin") != null) {
+    pagesessionrole = (String)session.getAttribute("session_userrole");  
+
+    if(!pagesessionrole.equalsIgnoreCase("client")) {
+      response.sendRedirect("index.jsp");
+    } 
+                  
+  } else {
+    response.sendRedirect("presetevents.jsp");
+  }
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events</title>
@@ -27,14 +40,15 @@
                 <div id="main-content" >
 
                     <fieldset>
-                        <legend>PRESET EVENTS</legend>
+                        <legend>MY EVENTS</legend>
                     </fieldset>
 
                     <table id = "tablecontainer">
                         <thead>
                           <tr>
                             <th>Event Name</th>
-                            <th>Category</th>
+                            <th>Date</th>
+                            <th></th>
                           </tr> 
                         </thead>
 
@@ -42,18 +56,21 @@
                             <% 
                                 ArrayList<Event> events = presetevents.viewAllEvents();
                                 if(!events.isEmpty()) {
-                                	for (Event event : events) {
+                                    for (Event event : events) {
                                         int eventid = event.getEventid();
                                         String eventname = event.getEventName();
-                                        String category = event.getCategory();
+                                        String eventdate = event.getEventName();
                                         String url = "event.jsp?id=" + eventid + "&type=preset";
                             %>
                                     <tr> 
-                                      <td width="70%"><a href=<%=url%>> <%=eventname%> </a></td>
-                                      <td width="30%"><%=category%></td>
+                                        <td width="50%"><a href=<%=url%>> <%=eventname%> </a></td>
+                                        <td width="30%"><%=eventdate%></td>
+                                        <td width="20%">
+                                            <button type="button" style="margin-left: 2px;" class="formbutton" id="sendinvitation">Send Guest Invitations</button>
+                                        </td>
                                     </tr>
                             <%
-                                	} 
+                                    } 
                                 } else {
                             %>
                                     <tr> 

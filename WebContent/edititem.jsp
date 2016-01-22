@@ -5,6 +5,19 @@
 <jsp:useBean id="allstaff" class="user.StaffUser" scope="request" />
 <%@ page import="event.EventDetails" %>
 <%@ page import="user.StaffUser" %>
+<%
+  String pagesessionrole = "";
+  if(session.getAttribute("session_isloggedin") != null) {
+    pagesessionrole = (String)session.getAttribute("session_userrole");  
+
+    if(pagesessionrole.equalsIgnoreCase("client")) {
+      response.sendRedirect("presetevents.jsp");
+    } 
+                  
+  } else {
+    response.sendRedirect("presetevents.jsp");
+  }
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - Edit Item</title>
@@ -15,11 +28,11 @@
 <body>
 <div id="container">
 
-    <jsp:directive.include file="include/header.html" />
+    <jsp:directive.include file="include/header.jsp" />
 
     <div id="body" class="width">
 
-        <jsp:directive.include file="include/sidemenu.html" />
+        <jsp:directive.include file="include/sidemenu.jsp" />
 
 		    <section id="content" class="two-column">
 

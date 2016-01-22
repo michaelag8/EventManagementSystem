@@ -3,6 +3,20 @@
 <%@ page language="java" contentType="text/html" import="java.util.*" errorPage="error.jsp" %>
 <jsp:useBean id="allusers" class="user.StaffUser" scope="request" />
 <%@ page import="user.StaffUser" %>
+<%
+  String pagesessionrole = "";
+  int admin = 0;
+  if(session.getAttribute("session_isloggedin") != null) {
+    pagesessionrole = (String)session.getAttribute("session_userrole");  
+
+    if(pagesessionrole.equalsIgnoreCase("admin")) {
+      admin = 1;
+    } 
+                  
+  } else {
+    response.sendRedirect("presetevents.jsp");
+  }
+%>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>XPERT Events - User</title>
@@ -15,11 +29,11 @@
 <body>
 <div id="container">
 
-    <jsp:directive.include file="include/header.html" />
+    <jsp:directive.include file="include/header.jsp" />
 
     <div id="body" class="width">
 
-        <jsp:directive.include file="include/sidemenu.html" />
+        <jsp:directive.include file="include/sidemenu.jsp" />
 
 		    <section id="content" class="two-column">
 
@@ -42,11 +56,20 @@
         	    <h3><%=username%></h3>
 
               <div id="refinesearch">
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="resetcredentials" 
+                <%
+                  if(admin == 1) {
+                %>
+                    <button type="button" style="margin-left: 2px;" class="formbutton" id="resetcredentials" 
                       onclick="document.location.href='resetcredentials.jsp?id=<%=userid%>';">Reset Credentials</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteuser">Delete User</button>
-                <button type="button" style="margin-left: 2px;" class="formbutton" id="editdetails" 
+                    <button type="button" style="margin-left: 2px;" class="formbutton" id="deleteuser">Delete User</button>
+                <%                
+                  } else {
+                %>
+                    <button type="button" style="margin-left: 2px;" class="formbutton" id="editdetails" 
                       onclick="document.location.href='edituser.jsp?id=<%=userid%>';">Edit Details</button>
+                <%
+                  }
+                %>
               </div>
 
               <div id="main-content" >
